@@ -19,8 +19,19 @@ if ((savedStorage != null) && (today.isSame(savedStorage.date, `day`))) {
 $(`#currentDay`).text(today.format("dddd, MMMM Do"));
 
 // Color code each timeblock to indicate past (grey), present (red), or future (green)
-// console.log(today.format(`hh A`))
+function renderColor() {
+    console.log(`Lets render those time blocks`);
+    $("textarea").each(function (i) {
+        console.log();
+        // If time block time (hour) is before today (hour), add past class color
+        this.addClass(`past`);
+        // Else If time block time (hour) is same as today (hour), add present class color
+        // Else, add future class color
+        
+    })
+}
 // console.log($(`.container`).children().eq(5).children().eq(0).text())
+// console.log(today.format(`hh A`))
 
 // When click into timeblock (event.target), user can type in an event.
 // Done by default with <textbox>
