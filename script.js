@@ -17,7 +17,10 @@ $(`.container`).on("click", "button", saveEvent);
 function saveEvent(event) {
     event.preventDefault;
     var currentDiv = $(event.currentTarget).parent().parent();
-    console.log(currentDiv.children().eq(1).val());
+    var event = currentDiv.children().eq(1).val();
+    var eventLocation = currentDiv.children().eq(0).attr(`id`);
+    eventList[eventLocation] = event;
+    console.log(eventList);
     return
 }
 // When refresh page, local storage populates daily plan with saved events
