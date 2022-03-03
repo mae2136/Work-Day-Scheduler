@@ -7,19 +7,20 @@ var eventStorage = {
     date: today,
 }
 
-var test = JSON.parse(localStorage.getItem(`eventStorage`)); 
+var savedStorage = JSON.parse(localStorage.getItem(`eventStorage`)); 
 
-if ((test != null) && (today.isSame(test.date, `day`))) {
+if ((savedStorage != null) && (today.isSame(savedStorage.date, `day`))) {
     console.log(`There is data stored and it belongs to today`)
-    eventStorage.events = test.events
+    eventStorage.events = savedStorage.events
     console.log(eventStorage);
+    renderEvents();
 }
 
 $(`#currentDay`).text(today.format("dddd, MMMM Do"));
 
 // Color code each timeblock to indicate past (grey), present (red), or future (green)
 // console.log(today.format(`hh A`))
-// console.log($(`.container`).chi+ldren().eq(5).children().eq(0).text())
+// console.log($(`.container`).children().eq(5).children().eq(0).text())
 
 // When click into timeblock (event.target), user can type in an event.
 // Done by default with <textbox>
@@ -42,3 +43,12 @@ function saveEvent(event) {
 }
 
 // When refresh page, local storage populates daily plan with saved events
+
+function renderEvents() {
+    // Loop through eventStorage.events array
+    $("textarea").each(function (i) {
+        console.log(eventStorage.events[i]);
+        this.textContent = eventStorage.events[i];
+    })
+    // For each textarea, add eventStorage.events text to textarea
+}
