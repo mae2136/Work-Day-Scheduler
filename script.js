@@ -1,5 +1,8 @@
 // Display current day at top of planner (in #currentDay)
 var today = moment();
+// Test time to check color changes
+var testDate = moment("2022-03-04").hour(20).minute(32);
+console.log(testDate);
 var eventList = []
 
 var eventStorage = {
@@ -7,7 +10,9 @@ var eventStorage = {
     date: today,
 }
 
-var savedStorage = JSON.parse(localStorage.getItem(`eventStorage`)); 
+renderColor();
+
+var savedStorage = JSON.parse(localStorage.getItem(`eventStorage`));
 
 if ((savedStorage != null) && (today.isSame(savedStorage.date, `day`))) {
     console.log(`There is data stored and it belongs to today`)
@@ -21,13 +26,18 @@ $(`#currentDay`).text(today.format("dddd, MMMM Do"));
 // Color code each timeblock to indicate past (grey), present (red), or future (green)
 function renderColor() {
     console.log(`Lets render those time blocks`);
-    $("textarea").each(function (i) {
+    $("textarea").each(function () {
         console.log();
         // If time block time (hour) is before today (hour), add past class color
-        this.addClass(`past`);
+        if (testDate.isBefore(today, `hour`)) {
+            $("textarea").addClass(`past`);
+        } else if (testDate.isSame(today, `hour`)) {
+            $("textarea").addClass(`present`);
+        } else {
+            $("textarea").addClass(`future`);
+        }
         // Else If time block time (hour) is same as today (hour), add present class color
         // Else, add future class color
-        
     })
 }
 // console.log($(`.container`).children().eq(5).children().eq(0).text())
