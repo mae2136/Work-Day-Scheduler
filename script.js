@@ -1,37 +1,40 @@
 // Display current day at top of planner (in #currentDay)
 var today = moment();
+$(`#currentDay`).text(today.format("dddd, MMMM Do"));
 // Test time to check color changes
-var testDate = moment("2022-03-04").hour(20).minute(32);
-console.log(testDate);
 var eventList = []
+var blockTime = [9, 10, 11, 12, 13, 14, 15, 16, 17];
+var checkTime = [];
 
+$.each(blockTime, function (i) {
+    checkTime.push(moment(blockTime[i], `HH`));
+});
+renderColor();
+
+// Event object storage
 var eventStorage = {
     events: eventList,
     date: today,
 }
 
-renderColor();
 
+// Pulls saved storage from local storage
 var savedStorage = JSON.parse(localStorage.getItem(`eventStorage`));
-
+// Checks to see if saved storage is relevant to today and if it has data. If true, then render saved events. Otherwise, clear local storage.
 if ((savedStorage != null) && (today.isSame(savedStorage.date, `day`))) {
-    console.log(`There is data stored and it belongs to today`)
     eventStorage.events = savedStorage.events
-    console.log(eventStorage);
     renderEvents();
+} else {
+    localStorage.clear();
 }
-
-$(`#currentDay`).text(today.format("dddd, MMMM Do"));
 
 // Color code each timeblock to indicate past (grey), present (red), or future (green)
 function renderColor() {
-    console.log(`Lets render those time blocks`);
-    $("textarea").each(function () {
-        console.log();
+    $("textarea").each(function (i) {
         // If time block time (hour) is before today (hour), add past class color
-        if (testDate.isBefore(today, `hour`)) {
+        if (checkTime[i].isBefore(today, `hour`)) {
             $("textarea").addClass(`past`);
-        } else if (testDate.isSame(today, `hour`)) {
+        } else if (checkTime[i].isSame(today, `hour`)) {
             $("textarea").addClass(`present`);
         } else {
             $("textarea").addClass(`future`);
@@ -40,11 +43,6 @@ function renderColor() {
         // Else, add future class color
     })
 }
-// console.log($(`.container`).children().eq(5).children().eq(0).text())
-// console.log(today.format(`hh A`))
-
-// When click into timeblock (event.target), user can type in an event.
-// Done by default with <textbox>
 
 // When click in to save button for the timeblock, then text for event is saved in local storage.
 $(`.container`).on("click", "button", saveEvent);
@@ -55,10 +53,8 @@ function saveEvent(event) {
     var event = currentDiv.children().eq(1).val();
     var eventLocation = currentDiv.children().eq(0).attr(`id`);
     eventList[eventLocation] = event;
-    // console.log(eventList);
     eventStorage.events = eventList;
     eventStorage.date = today;
-    console.log(eventStorage);
     localStorage.setItem(`eventStorage`, JSON.stringify(eventStorage));
     return
 }
@@ -67,9 +63,8 @@ function saveEvent(event) {
 
 function renderEvents() {
     // Loop through eventStorage.events array
+    // For each textarea, add eventStorage.events text to textarea
     $("textarea").each(function (i) {
-        console.log(eventStorage.events[i]);
         this.textContent = eventStorage.events[i];
     })
-    // For each textarea, add eventStorage.events text to textarea
 }
