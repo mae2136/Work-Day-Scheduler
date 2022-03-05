@@ -9,6 +9,7 @@ var checkTime = [];
 $.each(blockTime, function (i) {
     checkTime.push(moment(blockTime[i], `HH`));
 });
+
 renderColor();
 
 // Event object storage
@@ -33,11 +34,11 @@ function renderColor() {
     $("textarea").each(function (i) {
         // If time block time (hour) is before today (hour), add past class color
         if (checkTime[i].isBefore(today, `hour`)) {
-            $("textarea").addClass(`past`);
+            $(this).addClass(`past`);
         } else if (checkTime[i].isSame(today, `hour`)) {
-            $("textarea").addClass(`present`);
+            $(this).addClass(`present`);
         } else {
-            $("textarea").addClass(`future`);
+            $(this).addClass(`future`);
         }
         // Else If time block time (hour) is same as today (hour), add present class color
         // Else, add future class color
